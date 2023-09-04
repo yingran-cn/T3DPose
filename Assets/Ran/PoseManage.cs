@@ -1,8 +1,12 @@
-using System;
+using System.Collections.Generic;
 using Mediapipe;
 using Mediapipe.Unity.PoseTracking;
+using MemoryPack;
 using Ran.Pose;
+using Ran.Vo;
 using UnityEngine;
+using JointVo = Ran.Vo.JointVo;
+
 /*
 作者：Ran
 项目：PoseSend
@@ -26,11 +30,26 @@ namespace Ran
             }
             else
             {
-                foreach (var landmark in PoseTrackingSolution.poseWorldLandmarks.Landmark)
+                List<JointVo> joints = new List<JointVo>();
+     
+                foreach (var t in PoseTrackingSolution.poseWorldLandmarks.Landmark)
                 {
-                    Debug.Log("Presence" + landmark.Presence);
-                    Debug.Log("X:" + landmark.X + "y:" + landmark.Y + "Z:" + landmark.Z);
+                    joints.Add(new JointVo()
+                    {
+                        X = t.X,
+                        Y = t.Y,    
+                        Z = t.Z,
+                        Presence = t.Presence
+                    });
                 }
+
+                var msgBaseVo = new MsgBaseVo<List<JointVo>>();
+                msgBaseVo.Data = joints;
+                msgBaseVo.Type = Api.PoseWorldLandmarks;
+                // FM all joints
+                var bin = MemoryPackSerializer.Serialize(msgBaseVo);
+                
+                FMNetworkManager.instance.SendToServer(bin);
             }
         }
 
