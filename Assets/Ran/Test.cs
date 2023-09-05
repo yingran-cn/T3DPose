@@ -24,15 +24,17 @@ namespace Ran
         {
             if (PoseTrackingSolution.poseWorldLandmarks == null)
             {
-                Debug.Log("null pose track !!!!!!!!");
+                Debug.LogWarning("poseWorldLandmarks null !!!!!");
             }
             else
             {
-                foreach (var landmark in PoseTrackingSolution.poseWorldLandmarks.Landmark)
-                {
-                    Debug.Log("Presence" + landmark.Presence);
-                    Debug.Log("X:" + landmark.X + "y:" + landmark.Y + "Z:" + landmark.Z);
-                }
+                //
+                var angle = PoseMathTool.Angle(
+                    PoseMathTool.LandmarkToVector3(PoseTrackingSolution.poseWorldLandmarks.Landmark[14]),
+                    PoseMathTool.LandmarkToVector3(PoseTrackingSolution.poseWorldLandmarks.Landmark[11]),
+                    PoseMathTool.LandmarkToVector3(PoseTrackingSolution.poseWorldLandmarks.Landmark[24])
+                );
+                Debug.Log("angle" + angle);
             }
         }
 

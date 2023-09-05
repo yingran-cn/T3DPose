@@ -42,13 +42,11 @@ namespace Ran
                         Presence = t.Presence
                     });
                 }
-
                 var msgBaseVo = new MsgBaseVo<List<JointVo>>();
                 msgBaseVo.Data = joints;
                 msgBaseVo.Type = Api.PoseWorldLandmarks;
                 // FM all joints
                 var bin = MemoryPackSerializer.Serialize(msgBaseVo);
-                
                 FMNetworkManager.instance.SendToServer(bin);
             }
         }
